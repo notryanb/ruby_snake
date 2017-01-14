@@ -4,6 +4,6 @@ class Cell
   end
 
   def to_s
-    '_'
+    '■'
   end
 end

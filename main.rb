@@ -1,4 +1,5 @@
 require './game_board'
+require './player'
 
 def main
   # The whole game will be built inside this function
