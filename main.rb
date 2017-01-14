@@ -7,16 +7,13 @@ def main
   # high scores, create game board, etc...
   board = GameBoard.new(15, 60)
   game = true
-
+  i=0
   while game == true
+    printf "\033c" # Clears Screen to 0,0
+    i+=1
+    puts i
     puts board.to_s
-    puts "Enter your command"
-    p " >"
-    input = gets.chomp
-    puts "\n You input #{input}"
-    sleep 1
-
-    game = false if input == "exit"
+    sleep 0.2
   end  
 
 
