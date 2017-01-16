@@ -2,6 +2,19 @@ require './game_board'
 require './player'
 require './food'
 
+class IO
+  def readline_nonblock
+    rlnb_buffer = ""
+    while ch = self.read_nonblock(1) 
+      rlnb_buffer << ch
+      if ch == "\n" then
+        result = rlnb_buffer
+        return result
+      end
+    end     
+  end
+end 
+
 def main
   # The whole game will be built inside this function
   # A while-loop will check for user input, keep track of
@@ -18,17 +31,30 @@ def main
 
   r, z = food.start_position
   board.board[r][z] = food
-  #game = true
-  #i=0
 
-  puts board.to_s
-  #while game == true
-    #printf "\033c" # Clears Screen to 0,0
-    #i+=1
-    #puts i
-    #puts board.to_s
-    #sleep 0.2
-  #end  
+  loop do
+    printf "\033c" # Clears Screen to 0,0
+
+    system("stty raw -echo")
+    char = STDIN.read_nonblock(1) rescue nil
+
+    board.board[x][y-1] = player if char =~ /a/i
+
+   
+
+    system("stty -raw echo")
+    break if /q/i =~ char
+
+    puts "PRESS 'q' to quit \n"
+    puts board.to_s
+    
+    puts "CHAR: #{char}"
+
+    sleep 0.2
+  end  
+
+  puts "Thanks for playing"
 end
+
 
 main
