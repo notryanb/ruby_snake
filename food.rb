@@ -1,7 +1,6 @@
-class Player
+class Food
   attr_reader :start_position
   def initialize(rows, columns)
-    @length = 1
     @rows = rows
     @columns = columns
   end
@@ -11,6 +10,7 @@ class Player
   end
 
   def to_s
-    'X'
+    'F'
   end
 end
+

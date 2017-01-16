@@ -1,16 +1,21 @@
 require './cell'
 
 class GameBoard
-  attr_reader :height, :width, :board
+  attr_reader :rows, :columns, :board
 
-  def initialize(height, width)
-    @height = height
-    @width = width
+  def initialize(rows, columns)
+    @rows = rows
+    @columns = columns
     @board = build_board
   end
 
+  
   def build_board
-    Array.new(height, Array.new(width, Cell.new))
+    Array.new(@rows) do |row_idx|
+      Array.new(@columns) do |col_idx|
+        Cell.new(row_idx, col_idx, false)
+      end
+    end
   end
 
   def to_s
@@ -23,5 +28,4 @@ class GameBoard
     end 
     board_str
   end
-
 end
