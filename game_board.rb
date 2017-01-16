@@ -11,9 +11,11 @@ class GameBoard
 
   
   def build_board
+    #Array.new(@rows, Array.new(@columns, '.'))
     Array.new(@rows) do |row_idx|
       Array.new(@columns) do |col_idx|
-        Cell.new(row_idx, col_idx, false)
+        '.'
+        #Cell.new(row_idx, col_idx, false)
       end
     end
   end
