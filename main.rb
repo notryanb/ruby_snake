@@ -13,7 +13,7 @@ def main
   player = Player.new(rows, columns)
   food = Food.new(rows, columns)
 
-  y, x = player.current_position
+  x, y = player.current_position
   board.board[y][x] = player
 
   b, a = food.current_position
