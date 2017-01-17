@@ -3,13 +3,14 @@ class Player
 
   def initialize(rows, columns)
     @length = 1
-    @rows = rows
-    @columns = columns
+    @rows = rows - 1
+    @columns = columns - 1
     @current_position = start_position
   end
 
   def start_position
-    [ Random.new.rand(@rows), Random.new.rand(@columns) ]
+    [ Random.new.rand(@columns), Random.new.rand(@rows) ]
+
   end
 
   def current_position
