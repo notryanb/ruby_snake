@@ -18,14 +18,6 @@ class Player
     @body << cell
   end
 
-  #def current_direction=(direction)
-    #@direction = direction
-  #end
-
-  #def current_position=(coords)
-    #@current_position = coords
-  #end
-
   def to_s
     'X'
   end
