@@ -6,8 +6,8 @@ def main
   # The whole game will be built inside this function
   # A while-loop will check for user input, keep track of
   # high scores, create game board, etc...
-  rows = 20
-  columns = 50
+  rows = 30
+  columns = 30
 
   board = GameBoard.new(rows, columns)
   player = Player.new(rows, columns)
@@ -29,8 +29,12 @@ def main
 
     if player.current_direction == :left
       if player.current_position[0] >= 0
-        game_over = true if (player.current_position[0] - 1) < 0
-        player.current_position = [current_position[0] - 1, current_position[1]]
+        next_position = 
+          [player.current_position[0] - 1, player.current_position[1]]
+        game_over = true if (next_position[0]) < 0
+        #player.grow(next_position) if board.board[next_position[0]][next_position[1]].is_a?(Food)
+        player.current_position = next_position
+        player.grow(next_position) if board.board[player.current_position[1]][player.current_position[0]].is_a?(Food)
         board.board[player.current_position[1]][player.current_position[0]] = player
         board.board[current_position[1]][current_position[0]] = '.'
       end
@@ -81,6 +85,7 @@ def main
     puts board.to_s
     puts "Current Position: #{current_position}"
     puts "Player Position: #{player.current_position}"
+    puts "Player Body: #{player.body}"
     puts "Food Position: #{food.current_position}"
     puts "Next Position: #{(player.current_position[1] - 1 < 0)}"
 

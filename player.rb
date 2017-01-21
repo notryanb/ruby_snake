@@ -1,7 +1,7 @@
 class Player
   attr_reader :start_position
-  attr_accessor :current_position, :current_direction
-
+  attr_accessor :current_position, :current_direction, :body
+  
   def initialize(rows, columns)
     @body = []
     @rows = rows - 1

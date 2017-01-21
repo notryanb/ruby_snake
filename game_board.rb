@@ -9,25 +9,23 @@ class GameBoard
     @board = build_board
   end
 
-  
   def build_board
-    #Array.new(@rows, Array.new(@columns, '.'))
     Array.new(@rows) do |row_idx|
       Array.new(@columns) do |col_idx|
-        '.'
-        #Cell.new(row_idx, col_idx, false)
+        Cell.new(row_idx, col_idx)
       end
     end
   end
 
   def to_s
     board_str = ''
-    for row in @board
-      for cell in row
+    @board.each do |row|
+      row.each do |cell|
         board_str << cell.to_s
+        board_str << ' '
       end
       board_str << "\n"
-    end 
+    end
     board_str
   end
 end
