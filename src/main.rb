@@ -1,6 +1,7 @@
-require './game_board'
-require './player'
-require './food'
+Dir["./*.rb"].each { |file| require file }
+
+
+# Transpost board matrix and & standardize board access methods for array nestings
 
 def main
   # The whole game will be built inside this function
@@ -10,60 +11,62 @@ def main
   columns = 30
 
   board = GameBoard.new(rows, columns)
-  player = Player.new(rows, columns)
-  food = Food.new(rows, columns)
+  player = Player.new(Random.new.rand(rows), Random.new.rand(columns), :player)
+  food = Food.new(Random.new.rand(rows), Random.new.rand(columns), :food)
 
-  x, y = player.current_position
-  board.board[y][x] = player
-
-  b, a = food.current_position
-  board.board[b][a] = food
+  board.position = player
+  board.position = food
   game_over = false
 
   loop do
+    break if (game_over)
     printf "\033c" # Clears Screen to 0,0
 
     system('stty raw -echo')
     char = STDIN.read_nonblock(1) rescue nil
-    current_position = player.current_position
+    current_position = [player.x, player.y]
 
     if player.current_direction == :left
-      if player.current_position[0] >= 0
-        next_position = 
-          [player.current_position[0] - 1, player.current_position[1]]
+      if player.x >= 0
+        next_position = [player.x - 1, player.y]
         game_over = true if (next_position[0]) < 0
-        #player.grow(next_position) if board.board[next_position[0]][next_position[1]].is_a?(Food)
-        player.current_position = next_position
-        player.grow(next_position) if board.board[player.current_position[1]][player.current_position[0]].is_a?(Food)
-        board.board[player.current_position[1]][player.current_position[0]] = player
-        board.board[current_position[1]][current_position[0]] = '.'
+        player.x, player.y = next_position
+        player.grow(next_position) if board.position(player).type == :food
+        board.position = player
+        board.position = Cell.new(player.x + 1, player.y)
       end
     end
 
     if player.current_direction == :right
-      if (player.current_position[0] + 1) <= columns
-        game_over = true if (player.current_position[0] + 1) >= columns
-        player.current_position = [current_position[0] + 1, current_position[1]]
-        board.board[player.current_position[1]][player.current_position[0]] = player
-        board.board[current_position[1]][current_position[0]] = '.'
+      if (player.x + 1) <= columns
+        next_position = [player.x + 1, player.y]
+        game_over = true if next_position[0] >= columns
+        player.x, player.y = next_position
+        player.grow(next_position) if board.position(player).type == :food
+        board.position = player
+        board.position = Cell.new(player.x - 1, player.y)
       end
     end
 
     if player.current_direction == :down
-      if (player.current_position[1] + 1) <= rows
-        game_over = true if (player.current_position[1] + 1) >= rows
-        player.current_position = [current_position[0], current_position[1] + 1]
-        board.board[player.current_position[1]][player.current_position[0]] = player
-        board.board[current_position[1]][current_position[0]] = '.'
+      if (player.y + 1) <= rows
+        next_position = [player.x, player.y + 1]
+        game_over = true if next_position[1] >= rows
+        player.x, player.y = next_position
+        player.grow(next_position) if board.board[player.x][player.y].type == :food
+        board.position = player
+        board.board[current_position[0]][current_position[1]] = '.'
       end
     end
 
     if player.current_direction == :up
-      if (player.current_position[1]) >= 0
-        game_over = true if (player.current_position[1] - 1) < 0
-        player.current_position = [current_position[0], current_position[1] - 1]
-        board.board[player.current_position[1]][player.current_position[0]] = player
-        board.board[current_position[1]][current_position[0]] = '.'
+      if (player.y) >= 0
+        next_position = [player.x, player.y - 1]
+        game_over = true if next_position[1] < 0
+        player.x, player.y = next_position
+        player.grow(next_position) if board.board[player.x][player.y].type == :food
+        board.position = player
+        board.board[current_position[0]][current_position[1]] = '.'
       end
     end
 
@@ -75,19 +78,19 @@ def main
       player.current_direction = :down
     elsif char =~ /w/i
       player.current_direction = :up
+    elsif char =~ /q/i
+      game_over = true
     end
 
     system('stty -raw echo')
 
-    break if /q/i =~ char || game_over
 
     puts "\n==================\nPRESS 'q' to quit \n"
     puts board.to_s
     puts "Current Position: #{current_position}"
-    puts "Player Position: #{player.current_position}"
+    puts "Player Position: #{[player.x, player.y]}"
     puts "Player Body: #{player.body}"
-    puts "Food Position: #{food.current_position}"
-    puts "Next Position: #{(player.current_position[1] - 1 < 0)}"
+    puts "Food Position: #{[food.x, food.y]}"
 
     sleep 0.2
   end

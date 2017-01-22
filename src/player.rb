@@ -1,17 +1,10 @@
-class Player
-  attr_reader :start_position
-  attr_accessor :current_position, :current_direction, :body
+class Player < Cell
+  attr_accessor :current_direction, :body
   
-  def initialize(rows, columns)
+  def initialize(x, y, type)
+    super(x, y, type) 
+    @type = :player
     @body = []
-    @rows = rows - 1
-    @columns = columns - 1
-    @current_position = start_position
-    @current_direction = ''
-  end
-
-  def start_position
-    [Random.new.rand(@columns), Random.new.rand(@rows)]
   end
 
   def grow(cell)

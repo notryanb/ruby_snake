@@ -1,5 +1,3 @@
-require './cell'
-
 class GameBoard
   attr_reader :rows, :columns, :board
 
@@ -15,6 +13,14 @@ class GameBoard
         Cell.new(row_idx, col_idx)
       end
     end
+  end
+
+  def position(cell)
+    @board[cell.y][cell.x]
+  end
+
+  def position=(cell)
+    @board[cell.y][cell.x] = cell
   end
 
   def to_s
