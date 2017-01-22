@@ -1,3 +1,5 @@
+require './cell'
+
 class Player < Cell
   attr_accessor :current_direction, :body
   

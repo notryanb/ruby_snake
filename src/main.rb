@@ -1,5 +1,7 @@
-Dir["./*.rb"].each { |file| require file }
-
+require_relative 'player'
+require_relative 'food'
+require_relative 'cell'
+require_relative 'game_board'
 
 # Transpost board matrix and & standardize board access methods for array nestings
 
@@ -19,7 +21,6 @@ def main
   game_over = false
 
   loop do
-    break if (game_over)
     printf "\033c" # Clears Screen to 0,0
 
     system('stty raw -echo')
@@ -42,8 +43,10 @@ def main
         next_position = [player.x + 1, player.y]
         game_over = true if next_position[0] >= columns
         player.x, player.y = next_position
-        player.grow(next_position) if board.position(player).type == :food
-        board.position = player
+        unless game_over
+          player.grow(next_position) if board.position(player).type == :food
+          board.position = player
+        end
         board.position = Cell.new(player.x - 1, player.y)
       end
     end
@@ -53,9 +56,11 @@ def main
         next_position = [player.x, player.y + 1]
         game_over = true if next_position[1] >= rows
         player.x, player.y = next_position
-        player.grow(next_position) if board.board[player.x][player.y].type == :food
-        board.position = player
-        board.board[current_position[0]][current_position[1]] = '.'
+        unless game_over
+          player.grow(next_position) if board.position(player).type == :food
+          board.position = player
+        end
+        board.position = Cell.new(player.x, player.y - 1)
       end
     end
 
@@ -64,9 +69,9 @@ def main
         next_position = [player.x, player.y - 1]
         game_over = true if next_position[1] < 0
         player.x, player.y = next_position
-        player.grow(next_position) if board.board[player.x][player.y].type == :food
+        player.grow(next_position) if board.position(player).type == :food
         board.position = player
-        board.board[current_position[0]][current_position[1]] = '.'
+        board.position = Cell.new(player.x, player.y + 1)
       end
     end
 
@@ -78,12 +83,12 @@ def main
       player.current_direction = :down
     elsif char =~ /w/i
       player.current_direction = :up
-    elsif char =~ /q/i
-      game_over = true
     end
+
 
     system('stty -raw echo')
 
+    break if /q/i =~ char || game_over
 
     puts "\n==================\nPRESS 'q' to quit \n"
     puts board.to_s

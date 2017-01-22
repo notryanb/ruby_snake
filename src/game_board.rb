@@ -1,3 +1,5 @@
+require './cell'
+
 class GameBoard
   attr_reader :rows, :columns, :board
 
