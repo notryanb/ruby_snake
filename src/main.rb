@@ -12,6 +12,8 @@ class Snake
       Player.new(Random.new.rand(rows), Random.new.rand(columns))
     replenish_food
     @food_available = true
+    @score = 0
+    @history = []
   end
 
   def columns
@@ -22,10 +24,14 @@ class Snake
     @rows
   end
 
-  def update_board
-    @board.position = @player
+  def update_board(next_position)
+    @player.x, @player.y = next_position
+    consume_food
     replenish_food
-    @board.position = @food
+    last_position = @history.shift
+    @history << @player.clone
+    @board.position = Cell.new(last_position.x, last_position.y)
+    @history.each { |p| @board.position = p }
   end
 
   def replenish_food
@@ -35,18 +41,21 @@ class Snake
           .new(Random.new.rand(@rows), Random.new.rand(@columns), :food)
       @food_available = true
     end
+    @board.position = @food
   end
 
-  def consume_food(next_position)
+  def consume_food
     if @board.position(@player).type == :food
-      @player.grow(next_position)
+      @history << @player
+      @score += 1
       @food_available = false
     end
   end
   
   def play
     game_over = false
-    update_board
+    next_position = [@player.x, @player.y]
+    @history << @player.clone
 
     loop do
       printf "\033c" # Clears Screen to 0,0
@@ -58,23 +67,13 @@ class Snake
         if @player.x >= 0
           next_position = [@player.x - 1, @player.y]
           game_over = true if (next_position[0]) < 0
-          @player.x, @player.y = next_position
-          consume_food(next_position)
-          update_board
-          @board.position = Cell.new(@player.x + 1, @player.y)
         end
       end
 
       if @player.current_direction == :right
         if (@player.x + 1) <= columns
           next_position = [@player.x + 1, @player.y]
-          game_over = true if next_position[0] >= columns
-          @player.x, @player.y = next_position
-          unless game_over
-            consume_food(next_position)
-          end
-          update_board
-          @board.position = Cell.new(@player.x - 1, @player.y)
+          game_over = true if (next_position[0]) >= columns
         end
       end
 
@@ -82,12 +81,6 @@ class Snake
         if (@player.y + 1) <= rows
           next_position = [@player.x, @player.y + 1]
           game_over = true if next_position[1] >= rows
-          @player.x, @player.y = next_position
-          unless game_over
-            consume_food(next_position)
-          end
-          update_board
-          @board.position = Cell.new(@player.x, @player.y - 1)
         end
       end
 
@@ -95,12 +88,9 @@ class Snake
         if (@player.y) >= 0
           next_position = [@player.x, @player.y - 1]
           game_over = true if next_position[1] < 0
-          @player.x, @player.y = next_position
-          consume_food(next_position)
-          update_board
-          @board.position = Cell.new(@player.x, @player.y + 1)
         end
       end
+
 
       if char =~ /a/i
         @player.current_direction = :left
@@ -112,6 +102,7 @@ class Snake
         @player.current_direction = :up
       end
 
+      update_board(next_position) if !game_over
 
       system('stty -raw echo')
 
@@ -121,9 +112,9 @@ class Snake
       puts @board.to_s
       puts "Player Position: #{[@player.x, @player.y]}"
       puts "Player Body: #{@player.body}"
-      puts "Food Position: #{@food}"
+      puts "Score: #{@score}"
 
-      sleep 0.2
+      sleep 0.15
     end
 
     exit_message = game_over ? 'Sorry, game over!' : "\n\nThanks for playing"

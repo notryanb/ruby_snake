@@ -7,11 +7,6 @@ class Player < Cell
   def initialize(x, y, type = :player)
     super(x, y, type) 
     @type = type
-    @body = []
-  end
-
-  def grow(cell)
-    @body << cell
   end
 
   def to_s
