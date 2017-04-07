@@ -5,4 +5,3 @@ class Cell < Struct.new(:x, :y, :type)
     '.'
   end
 end
-

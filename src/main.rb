@@ -8,7 +8,7 @@ class Snake
     @rows = rows
     @columns = columns
     @board = GameBoard.new(rows, columns)
-    @player = 
+    @player =
       Player.new(Random.new.rand(rows), Random.new.rand(columns))
     replenish_food
     @food_available = true
@@ -36,9 +36,9 @@ class Snake
 
   def replenish_food
     if !@food_available
-      @food = 
+      @food =
         Food
-          .new(Random.new.rand(@rows), Random.new.rand(@columns), :food)
+        .new(Random.new.rand(@rows), Random.new.rand(@columns), :food)
       @food_available = true
     end
     @board.position = @food

@@ -1,0 +1,26 @@
+require 'yaml'
+
+def main
+  scores = [
+    { initial: 'RAB', score: 1234 },
+    { initial: 'REW', score: 423434 },
+    { initial: 'TRP', score: 16754 },
+    { initial: 'DSF', score: 1001234 }
+  ]
+  File.open('scores.yml', 'w') do |f|
+    table = scores
+      .sort_by { |s| s[:score] }
+      .map { |s| %Q(#{s[:initial]} #{s[:score]})}
+      .reverse
+
+    puts scores
+    f.write YAML.dump(table)
+  end
+
+  File
+    .readlines('scores.yml')
+    .each { |line| puts YAML.load(line) }
+end
+
+main
+
