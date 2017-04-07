@@ -67,6 +67,7 @@ class Snake
         if @player.x >= 0
           next_position = [@player.x - 1, @player.y]
           game_over = true if (next_position[0]) < 0
+          game_over = true if @board.position(Cell.new(next_position[0], next_position[1])).type == :player
         end
       end
 
@@ -74,6 +75,7 @@ class Snake
         if (@player.x + 1) <= columns
           next_position = [@player.x + 1, @player.y]
           game_over = true if (next_position[0]) >= columns
+          game_over = true if @board.position(Cell.new(next_position[0], next_position[1])).type == :player
         end
       end
 
@@ -81,6 +83,7 @@ class Snake
         if (@player.y + 1) <= rows
           next_position = [@player.x, @player.y + 1]
           game_over = true if next_position[1] >= rows
+          game_over = true if @board.position(Cell.new(next_position[0], next_position[1])).type == :player
         end
       end
 
@@ -88,9 +91,9 @@ class Snake
         if (@player.y) >= 0
           next_position = [@player.x, @player.y - 1]
           game_over = true if next_position[1] < 0
+          game_over = true if @board.position(Cell.new(next_position[0], next_position[1])).type == :player
         end
       end
-
 
       if char =~ /a/i
         @player.current_direction = :left
@@ -101,6 +104,7 @@ class Snake
       elsif char =~ /w/i
         @player.current_direction = :up
       end
+    
 
       update_board(next_position) if !game_over
 
