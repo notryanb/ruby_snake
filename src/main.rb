@@ -118,7 +118,7 @@ class Snake
       puts "Player Body: #{@player.body}"
       puts "Score: #{@score}"
 
-      sleep 0.15
+      sleep 0.1
     end
 
     exit_message = game_over ? 'Sorry, game over!' : "\n\nThanks for playing"
