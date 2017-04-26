@@ -1,3 +1,5 @@
+require 'curses'
+
 require_relative 'player'
 require_relative 'food'
 require_relative 'cell'
@@ -58,10 +60,6 @@ class Snake
     @history << @player.clone
 
     loop do
-      printf "\033c" # Clears Screen to 0,0
-
-      system('stty raw -echo')
-      char = STDIN.read_nonblock(1) rescue nil
 
       if @player.current_direction == :left
         if @player.x >= 0
@@ -95,28 +93,30 @@ class Snake
         end
       end
 
-      if char =~ /a/i
-        @player.current_direction = :left
-      elsif char =~ /d/i
-        @player.current_direction = :right
-      elsif char =~ /s/i
-        @player.current_direction = :down
-      elsif char =~ /w/i
-        @player.current_direction = :up
-      end
+      # if char =~ /a/i
+      #   @player.current_direction = :left
+      # elsif char =~ /d/i
+      #   @player.current_direction = :right
+      # elsif char =~ /s/i
+      #   @player.current_direction = :down
+      # elsif char =~ /w/i
+      #   @player.current_direction = :up
+      # end
     
 
       update_board(next_position) if !game_over
 
-      system('stty -raw echo')
+      # break if /q/i =~ char || game_over
 
-      break if /q/i =~ char || game_over
+      # puts "\n==================\nPRESS 'q' to quit \n"
 
-      puts "\n==================\nPRESS 'q' to quit \n"
-      puts @board.to_s
-      puts "Player Position: #{[@player.x, @player.y]}"
-      puts "Player Body: #{@player.body}"
-      puts "Score: #{@score}"
+      Curses.setpos(0, 0)
+      Curses.addstr(@board.to_s)
+      Curses.refresh
+
+      # puts "Player Position: #{[@player.x, @player.y]}"
+      # puts "Player Body: #{@player.body}"
+      # puts "Score: #{@score}"
 
       sleep 0.1
     end
@@ -125,5 +125,14 @@ class Snake
     puts exit_message
   end
 end
+  
+Curses.init_screen
+begin
+  Curses.nl
+  Curses.noecho
+  Curses.curs_set 0 # Hides cursor
+  Snake.new(30,30).play
+ensure
+  Curses.close_screen
+end
 
-Snake.new(30,30).play
