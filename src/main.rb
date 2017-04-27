@@ -72,6 +72,14 @@ class Snake
 
     loop do
 
+      # TODO:
+      # -------
+      #
+      # 1. Move direction & bounds checking into class || module
+      # 2. Add Game state
+      # 3. Move top level out of lib... maybe not use gem-like structure
+      # 4. Look into Curses cols / rows
+
       if @player.current_direction == :left
         if @player.x >= 0
           next_position = [@player.x - 1, @player.y]
@@ -128,7 +136,7 @@ class Snake
       Curses.addstr(@board.to_s)
       Curses.refresh
       
-      sleep 0.2
+      sleep 0.1
     end
 
     Curses.addstr( '*' * 1_000)
@@ -137,11 +145,10 @@ end
   
 Curses.init_screen
 begin
-  # Curses.nl
   Curses.noecho
   Curses.cbreak
   Curses.timeout=0
-  Curses.curs_set 0 # Hides cursor
+  Curses.curs_set 0 
   Snake.new(30,30).play
 ensure
   Curses.close_screen
