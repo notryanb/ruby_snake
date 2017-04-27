@@ -16,6 +16,7 @@ class Snake
     @food_available = true
     @score = 0
     @history = []
+    @char = nil
   end
 
   def columns
@@ -93,32 +94,25 @@ class Snake
         end
       end
 
-      # if char =~ /a/i
-      #   @player.current_direction = :left
-      # elsif char =~ /d/i
-      #   @player.current_direction = :right
-      # elsif char =~ /s/i
-      #   @player.current_direction = :down
-      # elsif char =~ /w/i
-      #   @player.current_direction = :up
-      # end
+      @char = Curses.getch
+
+      if @char =~ /a/i
+        @player.current_direction = :left
+      elsif @char =~ /d/i
+        @player.current_direction = :right
+      elsif @char =~ /s/i
+        @player.current_direction = :down
+      elsif @char =~ /w/i
+        @player.current_direction = :up
+      end
     
-
       update_board(next_position) if !game_over
-
-      # break if /q/i =~ char || game_over
-
-      # puts "\n==================\nPRESS 'q' to quit \n"
 
       Curses.setpos(0, 0)
       Curses.addstr(@board.to_s)
       Curses.refresh
-
-      # puts "Player Position: #{[@player.x, @player.y]}"
-      # puts "Player Body: #{@player.body}"
-      # puts "Score: #{@score}"
-
-      sleep 0.1
+      
+      sleep 0.2
     end
 
     exit_message = game_over ? 'Sorry, game over!' : "\n\nThanks for playing"
@@ -128,8 +122,10 @@ end
   
 Curses.init_screen
 begin
-  Curses.nl
+  # Curses.nl
   Curses.noecho
+  Curses.cbreak
+  Curses.timeout=0
   Curses.curs_set 0 # Hides cursor
   Snake.new(30,30).play
 ensure
