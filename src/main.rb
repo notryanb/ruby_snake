@@ -54,6 +54,16 @@ class Snake
       @food_available = false
     end
   end
+
+  def is_player?(next_position)
+    position =
+      @board
+        .position(
+          Cell.new(next_position[0], next_position[1])
+        )
+
+    position.type == :player
+  end
   
   def play
     game_over = false
@@ -65,32 +75,36 @@ class Snake
       if @player.current_direction == :left
         if @player.x >= 0
           next_position = [@player.x - 1, @player.y]
-          game_over = true if (next_position[0]) < 0
-          game_over = true if @board.position(Cell.new(next_position[0], next_position[1])).type == :player
+          if ((next_position[0]) < 0 || is_player?(next_position))
+            game_over = true
+          end
         end
       end
 
       if @player.current_direction == :right
         if (@player.x + 1) <= columns
           next_position = [@player.x + 1, @player.y]
-          game_over = true if (next_position[0]) >= columns
-          game_over = true if @board.position(Cell.new(next_position[0], next_position[1])).type == :player
+          if ((next_position[0]) >= columns || is_player?(next_position))
+            game_over = true
+          end
         end
       end
 
       if @player.current_direction == :down
         if (@player.y + 1) <= rows
           next_position = [@player.x, @player.y + 1]
-          game_over = true if next_position[1] >= rows
-          game_over = true if @board.position(Cell.new(next_position[0], next_position[1])).type == :player
+          if (next_position[1] >= rows || is_player?(next_position))
+            game_over = true
+          end
         end
       end
 
       if @player.current_direction == :up
         if (@player.y) >= 0
           next_position = [@player.x, @player.y - 1]
-          game_over = true if next_position[1] < 0
-          game_over = true if @board.position(Cell.new(next_position[0], next_position[1])).type == :player
+          if (next_position[1] < 0 || is_player?(next_position))
+            game_over = true
+          end
         end
       end
 
@@ -105,6 +119,8 @@ class Snake
       elsif @char =~ /w/i
         @player.current_direction = :up
       end
+
+      break if /q/i =~ @char || game_over
     
       update_board(next_position) if !game_over
 
@@ -112,11 +128,10 @@ class Snake
       Curses.addstr(@board.to_s)
       Curses.refresh
       
-      sleep 0.1
+      sleep 0.2
     end
 
-    exit_message = game_over ? 'Sorry, game over!' : "\n\nThanks for playing"
-    puts exit_message
+    Curses.addstr( '*' * 1_000)
   end
 end
   
