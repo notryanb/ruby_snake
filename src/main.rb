@@ -112,7 +112,7 @@ class Snake
       Curses.addstr(@board.to_s)
       Curses.refresh
       
-      sleep 0.2
+      sleep 0.1
     end
 
     exit_message = game_over ? 'Sorry, game over!' : "\n\nThanks for playing"
