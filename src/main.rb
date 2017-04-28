@@ -76,7 +76,6 @@ class Snake
       end
     end
 
-
     if @game_state == :playing
       @history << @player.clone
       loop do
