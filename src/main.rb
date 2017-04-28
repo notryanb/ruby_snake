@@ -78,13 +78,10 @@ class Snake
 
 
     if @game_state == :playing
-      game_over = false
-      next_position = [@player.x, @player.y]
       @history << @player.clone
       loop do
 
         game_over = game_over?
-        next_position = player_next_position
 
         @char = Curses.getch
 
