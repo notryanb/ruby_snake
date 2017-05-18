@@ -10,6 +10,8 @@ require_relative 'rules'
 class Snake
   include Rules
 
+  attr_reader :rows, :columns
+
   def initialize(rows, columns)
     @rows = rows
     @columns = columns
@@ -22,14 +24,6 @@ class Snake
     @score = 0
     @history = []
     @char = nil
-  end
-
-  def columns
-    @columns
-  end
-
-  def rows
-    @rows
   end
 
   def update_board(next_position)

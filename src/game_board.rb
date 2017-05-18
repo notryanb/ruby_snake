@@ -4,6 +4,8 @@ class GameBoard
   attr_reader :rows, :columns, :board
 
   def initialize(rows, columns)
+    @rows = rows
+    @columns = columns
     @board = @board ||= build_board
   end
 
