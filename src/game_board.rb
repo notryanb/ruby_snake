@@ -4,14 +4,12 @@ class GameBoard
   attr_reader :rows, :columns, :board
 
   def initialize(rows, columns)
-    @rows = rows
-    @columns = columns
-    @board = build_board
+    @board = @board ||= build_board
   end
 
   def build_board
-    Array.new(@rows) do |row_idx|
-      Array.new(@columns) do |col_idx|
+    Array.new(rows) do |row_idx|
+      Array.new(columns) do |col_idx|
         Cell.new(row_idx, col_idx)
       end
     end
