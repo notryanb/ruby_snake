@@ -10,9 +10,16 @@ class PlayerTest < Minitest::Test
     assert_equal 'X', @player.to_s
   end
 
-  def test_interface
+  def test_getters
     assert_equal 30, @player.x
     assert_equal 30, @player.y
     assert_equal :player, @player.type
+  end
+  
+  def test_setters
+    @player.x = 25
+    @player.y = 35
+    assert_equal 25, @player.x
+    assert_equal 35, @player.y
   end
 end
