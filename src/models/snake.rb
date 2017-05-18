@@ -1,3 +1,5 @@
+require 'pry'
+
 class Snake
   include Rules
 
