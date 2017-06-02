@@ -2,18 +2,18 @@ module GameState
   class Play
     include Rules
 
-    attr_reader :rows, :columns, :completed
+    attr_reader :rows, :columns, :completed, :name
 
     def initialize(rows, columns)
+      @name = :play
       @rows = rows
       @columns = columns
       @board = GameBoard.new(rows, columns)
-      @game_state = :playing
-      @player = Player.new(Random.new.rand(rows), Random.new.rand(columns))
+      @player = Player.new(random_position(rows), random_position(columns))
       replenish_food
       @food_available = true
       @score = 0
-      @char = nil
+      @input = nil
       @history = [@player.clone]
       @completed = false
     end
@@ -28,11 +28,14 @@ module GameState
       @history.each { |p| @board.position = p }
     end
 
+    def random_position(num)
+      Random.new.rand(num)
+    end
+
     def replenish_food
       if !@food_available
         @food =
-          Food
-          .new(Random.new.rand(@rows), Random.new.rand(@columns), :food)
+          Food.new(random_position(@rows), random_position(@columns))
         @food_available = true
       end
       @board.position = @food
@@ -49,24 +52,28 @@ module GameState
     def run
       game_over = game_over?
 
-      @char = Curses.getch
+      @input = Curses.getch
 
-      if @char =~ /a/i
+      if @input =~ /a/i
         @player.current_direction = :left
-      elsif @char =~ /d/i
+      elsif @input =~ /d/i
         @player.current_direction = :right
-      elsif @char =~ /s/i
+      elsif @input =~ /s/i
         @player.current_direction = :down
-      elsif @char =~ /w/i
+      elsif @input =~ /w/i
         @player.current_direction = :up
+      elsif @input =~ /q/i
+        game_over = true
       end
 
-      @completed = true  if /q/i =~ @char || game_over
+      @completed = true if game_over
     
       update_board(next_position) if !game_over
 
       Curses.setpos(0, 0)
       Curses.addstr(@board.to_s)
+      Curses.addstr('=' * @rows)
+      Curses.addstr("\nSCORE: #{@score}, GAME OVER: #{game_over}, COMPLETED: #{completed}")
       Curses.refresh
       
       sleep 0.1

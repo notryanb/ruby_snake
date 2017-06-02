@@ -1,10 +1,12 @@
 module GameState
   class Menu
     attr_accessor :completed
+    attr_reader :name
 
     def initialize
       @player_input = nil
       @completed = false
+      @name = :menu
     end
 
     def run

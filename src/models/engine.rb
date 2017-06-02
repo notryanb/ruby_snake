@@ -1,4 +1,8 @@
 class Engine
+# Game Engine runs the main loop and transitions state
+# It is reponsible for getting the current state and moving
+# into the next state when the current one is done.
+
   class << self
     def call
       new(GameState::Manager.new).start
@@ -17,7 +21,3 @@ class Engine
     end
   end
 end
-
-# Game Engine runs the main loop and transitions state
-# It is reponsible for getting the current state and moving
-# into the next state when the current one is done.
