@@ -2,7 +2,7 @@ module GameState
   class Play
     include Rules
 
-    attr_reader :rows, :columns
+    attr_reader :rows, :columns, :completed
 
     def initialize(rows, columns)
       @rows = rows
@@ -61,7 +61,7 @@ module GameState
         @player.current_direction = :up
       end
 
-      # @completed = true  if /q/i =~ @char || game_over
+      @completed = true  if /q/i =~ @char || game_over
     
       update_board(next_position) if !game_over
 
