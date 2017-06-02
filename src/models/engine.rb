@@ -10,14 +10,15 @@ class Engine
   end
 
   def initialize(manager)
-    @current_state = manager.current_state
-    @next_state = manager.next_state
+    @manager = manager
+    @current_state = @manager.current_state
+    # @next_state = manager.next_state
   end
 
   def start
     loop do
       @current_state.run
-      @current_state = @next_state if @current_state.completed
+      @manager.current_state = @manager.next_state if @current_state.completed
     end
   end
 end

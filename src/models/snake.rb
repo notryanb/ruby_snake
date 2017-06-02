@@ -66,7 +66,7 @@ module GameState
         game_over = true
       end
 
-      @completed = true if game_over
+      @completed = game_over
     
       update_board(next_position) if !game_over
 

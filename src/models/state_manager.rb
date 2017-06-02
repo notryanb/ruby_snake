@@ -8,8 +8,14 @@ module GameState
     end
 
     def next_state
-      return GameState::Play.new(30, 30) if @state_name == :menu
-      exit(true) if @state_name == :play
+      case @state_name
+      when :menu
+        return GameState::Play.new(30, 30)
+      when :play
+        return GameState::GameOver.new
+      else
+        exit(1)
+      end
     end
   end
 end
