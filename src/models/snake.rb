@@ -70,6 +70,7 @@ module GameState
     
       update_board(next_position) if !game_over
 
+      Curses.clear
       Curses.setpos(0, 0)
       Curses.addstr(@board.to_s)
       Curses.addstr('=' * @rows)

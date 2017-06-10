@@ -4,14 +4,15 @@ require 'yaml'
 $LOAD_PATH.unshift '.'
 
 require 'models/cell'
-require 'models/player'
+require 'models/engine'
 require 'models/food'
 require 'models/game_board'
+require 'models/menu'
+require 'models/player'
 require 'models/rules'
 require 'models/snake'
+require 'models/game_over'
 require 'models/state_manager'
-require 'models/engine'
-require 'models/menu'
 
 def main
   Curses.init_screen

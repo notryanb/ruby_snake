@@ -1,6 +1,7 @@
 module GameState
   class GameOver
-    attr_reader :name, :completed
+    attr_accessor :completed
+    attr_reader :name
 
     def initialize
       @completed = false
@@ -8,15 +9,10 @@ module GameState
     end
 
     def run
-      puts "*" * 1000
-      Curses.clear
-      
       msg = 'Thanks for Playing!'
       Curses.setpos(0, 0)
       Curses.addstr(msg)
-      Curses.refresh
-      sleep 0.1
-      # exit(1)
+
     end
   end
 end
