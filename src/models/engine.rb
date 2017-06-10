@@ -12,13 +12,18 @@ class Engine
   def initialize(manager)
     @manager = manager
     @current_state = @manager.current_state
-    # @next_state = manager.next_state
   end
 
   def start
     loop do
+      check_state
       @current_state.run
-      @manager.current_state = @manager.next_state if @current_state.completed
     end
+  end
+
+  def check_state
+    return unless @current_state.completed
+    @manager.transition_state
+    @current_state = @manager.current_state
   end
 end
