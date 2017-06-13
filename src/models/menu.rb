@@ -8,7 +8,7 @@ module GameState
     end
 
     def run
-      msg = 'WELCOME TO RUBY SNAKE\n Press <e> to Start'
+      msg = "WELCOME TO RUBY SNAKE\n Press <e> to Start"
 
       # Check for user 
       player_input = Curses.getch

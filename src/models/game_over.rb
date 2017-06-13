@@ -1,7 +1,6 @@
 module GameState
   class GameOver
-    attr_accessor :completed
-    attr_reader :name
+    attr_reader :name, :completed
 
     def initialize
       @completed = false
@@ -9,11 +8,19 @@ module GameState
     end
 
     def run
-      msg = 'Thanks for Playing!'
+      Curses.clear
+      
+      # Check for user 
+      player_input = Curses.getch
+      exit(1) if player_input =~ /q/i
+
+      msg = "Thanks for Playing! Press 'q' to quit"
       Curses.setpos(0, 0)
       Curses.addstr(msg)
-
+      Curses.refresh
+      sleep 0.1
     end
   end
 end
+
 
