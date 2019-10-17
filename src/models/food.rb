@@ -4,7 +4,7 @@ class Food < Cell
   end
 
   def to_s
-    'F'
+    "🍕"
   end
 end
 

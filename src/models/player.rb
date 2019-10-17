@@ -6,6 +6,6 @@ class Player < Cell
   end
 
   def to_s
-    'X'
+    "🐲"
   end
 end
